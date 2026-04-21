@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración Electrónica</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="background-elements">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <main class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-atom"></i>
+            </div>
+            <h1>Configuración Electrónica</h1>
+            <p>Calcula y visualiza propiedades periódicas</p>
+        </header>
+
+        <!-- Electronic Configuration View -->
+        <div id="electronicView" class="view-section active">
+            <section class="card elec-card">
+                <div class="elec-header">
+                    <h3 class="side-title"><i class="fa-solid fa-atom"></i> Configuración Electrónica</h3>
+                    <p class="comp-subtitle">Calcula usando diferentes opciones.</p>
+                </div>
+                
+                <div id="elecElementsList">
+                    <!-- Default initial block -->
+                    <div class="element-block">
+                        <div class="element-block-header">
+                            <h4 class="block-title">Elemento 1</h4>
+                            <button class="remove-block-btn" style="display: none;" title="Eliminar"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                        <div class="input-group">
+                            <label>¿Qué dato tienes?</label>
+                            <select class="elecInputMode">
+                                <option value="z">Número Atómico (Z) o Símbolo</option>
+                                <option value="ion">Ion (Z y Carga)</option>
+                                <option value="isoelectronic">Relación Isoelectrónica</option>
+                                <option value="quantum">Estado Cuántico del Electrón</option>
+                                <option value="cn">Carga Nuclear (CN)</option>
+                                <option value="ce">Carga Electrónica (CE)</option>
+                            </select>
+                        </div>
+                        <div class="elecDynamicInputs elec-dynamic-area">
+                            <div class="input-group">
+                                <label>Elemento(s) (Z o Símbolo)</label>
+                                <input type="text" class="elecZValue" placeholder="Ej. 11, Na, 13 (separados por coma)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="addElecBlockBtn" style="width: 100%; border: 2px dashed rgba(63, 185, 80, 0.4); background: rgba(63, 185, 80, 0.05); color: var(--accent); padding: 1rem; border-radius: 12px; cursor: pointer; transition: var(--transition); font-weight: 600; font-size: 1rem; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-plus"></i> Añadir Otro Elemento a Comparar
+                </button>
+
+                <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1.5rem;">
+                    <button class="calc-btn" id="elecCalcBtn" style="margin-top: 0; flex: 1;">
+                        Calcular Configuración <i class="fa-solid fa-bolt" style="margin-left: 5px;"></i>
+                    </button>
+                    <button id="elecClearBtn" style="background: rgba(255, 107, 107, 0.2); border: 1px solid rgba(255, 107, 107, 0.4); color: #ff6b6b; padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; transition: var(--transition); display: none;">
+                        Limpiar Todo <i class="fa-solid fa-trash-can" style="margin-left: 5px;"></i>
+                    </button>
+                </div>
+
+                <!-- Output Area (History) -->
+                <div id="elecResultsContainer" style="margin-top: 2rem;">
+                    <!-- Result cards will be injected here -->
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
