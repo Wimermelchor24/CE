@@ -467,6 +467,28 @@ function getPeriodicInfo(z) {
         lastSub = { ...sub, e: take };
     }
     
+    // Apply electron configuration exceptions (d4, d9, f1) for periodic properties consistency
+    if (config.length > 0) {
+        const lastSubConf = config[config.length - 1];
+        if (lastSubConf.name.endsWith('d') && (lastSubConf.e === 4 || lastSubConf.e === 9)) {
+            const nD = lastSubConf.n;
+            const sName = `${nD + 1}s`;
+            const sSubIndex = config.findIndex(sub => sub.name === sName);
+            if (sSubIndex !== -1 && config[sSubIndex].e === 2) {
+                config[sSubIndex].e = 1;
+                lastSubConf.e += 1;
+            }
+        } else if (lastSubConf.name.endsWith('f') && lastSubConf.e === 1) {
+            const nF = lastSubConf.n;
+            const nextDName = `${nF + 1}d`;
+            
+            config.pop();
+            config.push({ n: nF + 1, l: 2, max: 10, name: nextDName, e: 1 });
+            
+            lastSub = config[config.length - 1];
+        }
+    }
+    
     const highestS = config.find(s => s.n === maxN && s.l === 0);
     sElectrons = highestS ? highestS.e : 0;
     
@@ -537,6 +559,34 @@ function getConfigurationHtml(electrons) {
         standardConfigArray.push({ name: sub.name, e: take });
         configWithInfo.push({ name: sub.name, e: take, n: sub.n, l: sub.l });
         remaining -= take;
+    }
+    
+    // Apply electron configuration exceptions (d4, d9, f1)
+    if (standardConfigArray.length > 0) {
+        const lastSub = standardConfigArray[standardConfigArray.length - 1];
+        if (lastSub.name.endsWith('d') && (lastSub.e === 4 || lastSub.e === 9)) {
+            const nD = parseInt(lastSub.name);
+            const sName = `${nD + 1}s`;
+            const sSubIndex = standardConfigArray.findIndex(sub => sub.name === sName);
+            if (sSubIndex !== -1 && standardConfigArray[sSubIndex].e === 2) {
+                standardConfigArray[sSubIndex].e = 1;
+                lastSub.e += 1;
+                
+                const infoSIndex = configWithInfo.findIndex(sub => sub.name === sName);
+                if (infoSIndex !== -1) configWithInfo[infoSIndex].e = 1;
+                const infoLastIndex = configWithInfo.length - 1;
+                configWithInfo[infoLastIndex].e += 1;
+            }
+        } else if (lastSub.name.endsWith('f') && lastSub.e === 1) {
+            const nF = parseInt(lastSub.name);
+            const nextDName = `${nF + 1}d`;
+            
+            standardConfigArray.pop();
+            configWithInfo.pop();
+            
+            standardConfigArray.push({ name: nextDName, e: 1 });
+            configWithInfo.push({ name: nextDName, e: 1, n: nF + 1, l: 2 });
+        }
     }
     
     const standardHtml = standardConfigArray.map(m => m.name + '<sup>' + m.e + '</sup>').join(' ');
